@@ -10,7 +10,7 @@ namespace TaskManagerPlatform.Domain.Entities
         public string Description { get; set; }
         public DateTime Deadline { get; set; }
         public Guid StatusId { get; set; }
-        public Status Status { get; set; }
-        public ICollection<UserToTask> UserToTasks { get; set; }
+        public virtual Status Status { get; set; }
+        public virtual ICollection<UserToTask> UserToTasks { get; set; }
     }
 }

@@ -5,15 +5,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using TaskManagerPlatform.Domain.Common;
 using TaskManagerPlatform.Domain.Entities;
+using TaskManagerPlatform.Persistence.Extensions;
 
 namespace TaskManagerPlatform.Persistence.Contexts
 {
     public class TaskManagerPlatformDbContext: DbContext
     {
-        public TaskManagerPlatformDbContext(DbContextOptions<TaskManagerPlatformDbContext> options)
-           : base(options)
-        {
-        }
+        public TaskManagerPlatformDbContext(DbContextOptions<TaskManagerPlatformDbContext> options) : base(options) {}
 
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Role> Roles { get; set; }
@@ -27,6 +25,8 @@ namespace TaskManagerPlatform.Persistence.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Seed();
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
@@ -36,6 +36,7 @@ namespace TaskManagerPlatform.Persistence.Contexts
                 switch (entry.State)
                 {
                     case EntityState.Added:
+                        entry.Entity.Id = Guid.NewGuid();
                         entry.Entity.CreatedDate = DateTime.Now;
                         break;
                     case EntityState.Modified:

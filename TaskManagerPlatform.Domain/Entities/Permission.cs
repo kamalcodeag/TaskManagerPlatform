@@ -6,6 +6,6 @@ namespace TaskManagerPlatform.Domain.Entities
     public class Permission : BaseEntity
     {
         public string Name { get; set; }
-        public ICollection<RoleToPermission> RoleToPermissions { get; set; }
+        public virtual ICollection<RoleToPermission> RoleToPermissions { get; set; }
     }
 }

@@ -14,7 +14,8 @@ namespace TaskManagerPlatform.Persistence.Configurations
 
             builder.HasMany(p => p.RoleToPermissions)
                    .WithOne(rtp => rtp.Permission)
-                   .HasForeignKey(rtp => rtp.PermissionId);
+                   .HasForeignKey(rtp => rtp.PermissionId)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -15,4 +15,8 @@
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TaskManagerPlatform.Domain\TaskManagerPlatform.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
