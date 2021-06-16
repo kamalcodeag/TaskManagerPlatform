@@ -28,7 +28,7 @@ namespace TaskManagerPlatform.API.Controllers
             return Ok(await _authenticationService.SignUpAsync(request));
         }
 
-        [AuthorizeRoles(Role.Admin)]
+        //[AuthorizeRoles(Role.Admin)]
         [HttpPost("createuser")]
         public async Task<ActionResult<CreateUserResponse>> CreateUserAsync(CreateUserRequest request)
         {
@@ -36,17 +36,17 @@ namespace TaskManagerPlatform.API.Controllers
         }
     }
 
-    public class AuthorizeRolesAttribute : AuthorizeAttribute
-    {
-        public AuthorizeRolesAttribute(params string[] roles) : base()
-        {
-            Roles = string.Join(",", roles);
-        }
-    }
+    //public class AuthorizeRolesAttribute : AuthorizeAttribute
+    //{
+    //    public AuthorizeRolesAttribute(params string[] roles) : base()
+    //    {
+    //        Roles = string.Join(",", roles);
+    //    }
+    //}
 
-    public static class Role
-    {
-        public const string Admin = "admin";
-        public const string User = "user";
-    }
+    //public static class Role
+    //{
+    //    public const string Admin = "admin";
+    //    public const string User = "user";
+    //}
 }
