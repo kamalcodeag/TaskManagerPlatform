@@ -1,9 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace TaskManagerPlatform.Application.Models.Authentication
 {
     public class CreateUserRequest
     {
+        [Required]
+        public Guid OrganizationUserId { get; set; }
         [Required, MaxLength(255)] 
         public string Name { get; set; }
         [Required, MaxLength(255)]

@@ -14,7 +14,7 @@ namespace TaskManagerPlatform.Domain.Entities
         public string Username { get; set; }
         public string Salt { get; set; }
         public string PasswordHash { get; set; }
-        public Guid OrganizationId { get; set; }
+        public Guid? OrganizationId { get; set; }
         public virtual User Organization { get; set; }
         public virtual ICollection<UserToRole> UserToRoles { get; set; }
         public virtual ICollection<UserToTask> UserToTasks { get; set; }

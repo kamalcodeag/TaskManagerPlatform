@@ -128,7 +128,7 @@ namespace TaskManagerPlatform.Identity.Services
             return new SignUpResponse() { UserId = organization.Id };
         }
 
-        public async Task<CreateUserResponse> CreateUserAsync(User organizationUser, CreateUserRequest request)
+        public async Task<CreateUserResponse> CreateUserAsync(CreateUserRequest request)
         {
             User user = null;
 
@@ -157,7 +157,7 @@ namespace TaskManagerPlatform.Identity.Services
             };
 
             newUser.PasswordHash = CreatePasswordHash(request.Password, newUser.Salt);
-            newUser.OrganizationId = organizationUser.Id;
+            newUser.OrganizationId = request.OrganizationUserId;
             await _userRepository.AddAsync(newUser);
 
             Role userRole = await _roleRepository.GetRoleByNameAsync("user");
@@ -261,6 +261,14 @@ namespace TaskManagerPlatform.Identity.Services
             }
             .Union(userClaims)
             .Union(roleClaims);
+
+            //IEnumerable<Claim> claims = new List<Claim>
+            //{
+            //    new Claim(JwtRegisteredClaimNames.Sub, user.Username),
+            //    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            //    new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            //    new Claim("UserId", user.Id.ToString())
+            //};
 
             SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             SigningCredentials signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);

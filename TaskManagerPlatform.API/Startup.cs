@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -24,9 +25,33 @@ namespace TaskManagerPlatform.API
         {
 
             services.AddControllers();
+
+            //
+            var securityScheme = new OpenApiSecurityScheme
+            {
+                Name = "JWT Authentication",
+                Description = "Enter JWT Bearer token *only*",
+                Type = SecuritySchemeType.Http,
+                In = ParameterLocation.Header,
+                BearerFormat = "JWT",
+                Scheme = "bearer",
+                Reference = new OpenApiReference
+                {
+                    Id = JwtBearerDefaults.AuthenticationScheme,
+                    Type = ReferenceType.SecurityScheme
+                }
+            };
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TaskManagerPlatform.API", Version = "v1" });
+
+                //
+                c.AddSecurityDefinition(securityScheme.Reference.Id, securityScheme);
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {securityScheme, new string[] { }}
+                });
             });
 
             services.AddApplicationServices();
@@ -52,6 +77,10 @@ namespace TaskManagerPlatform.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("Open");
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

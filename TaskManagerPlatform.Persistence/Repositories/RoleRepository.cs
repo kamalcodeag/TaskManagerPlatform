@@ -21,8 +21,8 @@ namespace TaskManagerPlatform.Persistence.Repositories
         public async Task<List<Role>> GetRolesOfUserAsync(Guid userId)
         {
             User user = await _dbContext.Users.FindAsync(userId);
-            List<UserToRole> userToRoles = await _dbContext.UserToRoles.Where(utr => utr.UserId == userId).ToListAsync();
-            List<Role> roles = null;
+            List<UserToRole> userToRoles = user.UserToRoles.ToList();
+            List<Role> roles = new List<Role>();
 
             foreach (var userToRole in userToRoles)
             {

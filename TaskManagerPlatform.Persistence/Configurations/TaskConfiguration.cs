@@ -17,7 +17,8 @@ namespace TaskManagerPlatform.Persistence.Configurations
             builder.HasOne(t => t.Status)
                    .WithMany(s => s.Tasks)
                    .HasForeignKey(t => t.StatusId)
-                   .OnDelete(DeleteBehavior.ClientSetNull);
+                   .IsRequired(false)
+                   .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasMany(t => t.UserToTasks)
                    .WithOne(utt => utt.Task)

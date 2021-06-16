@@ -8,6 +8,6 @@ namespace TaskManagerPlatform.Application.Contracts.Identity
     {
         Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request);
         Task<SignUpResponse> SignUpAsync(SignUpRequest request);
-        Task<CreateUserResponse> CreateUserAsync(User user, CreateUserRequest request);
+        Task<CreateUserResponse> CreateUserAsync(CreateUserRequest request);
     }
 }

@@ -14,7 +14,8 @@ namespace TaskManagerPlatform.Persistence.Configurations
             builder.HasMany(s => s.Tasks)
                    .WithOne(t => t.Status)
                    .HasForeignKey(t => t.StatusId)
-                   .OnDelete(DeleteBehavior.ClientSetNull);
+                   .IsRequired(false)
+                   .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

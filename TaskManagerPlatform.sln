@@ -9,17 +9,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{D9BE420A-6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{7C6822FD-9736-48D0-9205-1D4370998465}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{C688E7ED-AEE8-45F8-8F64-AEE539B6964C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManagerPlatform.Domain", "TaskManagerPlatform.Domain\TaskManagerPlatform.Domain.csproj", "{ECE6BDCC-8F9C-4C9A-AC3E-CA9F0847FB5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagerPlatform.Domain", "TaskManagerPlatform.Domain\TaskManagerPlatform.Domain.csproj", "{ECE6BDCC-8F9C-4C9A-AC3E-CA9F0847FB5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManagerPlatform.Application", "TaskManagerPlatform.Application\TaskManagerPlatform.Application.csproj", "{94A88D9E-2F99-4904-81EF-FD5D7CB8D4DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagerPlatform.Application", "TaskManagerPlatform.Application\TaskManagerPlatform.Application.csproj", "{94A88D9E-2F99-4904-81EF-FD5D7CB8D4DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManagerPlatform.Infrastructure", "TaskManagerPlatform.Infrastructure\TaskManagerPlatform.Infrastructure.csproj", "{5EA173A9-A60E-42AE-B789-795664664AA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagerPlatform.Infrastructure", "TaskManagerPlatform.Infrastructure\TaskManagerPlatform.Infrastructure.csproj", "{5EA173A9-A60E-42AE-B789-795664664AA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManagerPlatform.Persistence", "TaskManagerPlatform.Persistence\TaskManagerPlatform.Persistence.csproj", "{1D4930BE-3644-413B-835B-AA5935E79529}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagerPlatform.Persistence", "TaskManagerPlatform.Persistence\TaskManagerPlatform.Persistence.csproj", "{1D4930BE-3644-413B-835B-AA5935E79529}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagerPlatform.API", "TaskManagerPlatform.API\TaskManagerPlatform.API.csproj", "{84C2131C-40AF-4484-8AAD-CA587AA4A57A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManagerPlatform.API", "TaskManagerPlatform.API\TaskManagerPlatform.API.csproj", "{84C2131C-40AF-4484-8AAD-CA587AA4A57A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

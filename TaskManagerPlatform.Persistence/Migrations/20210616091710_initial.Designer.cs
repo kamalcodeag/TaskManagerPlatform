@@ -10,7 +10,7 @@ using TaskManagerPlatform.Persistence.Contexts;
 namespace TaskManagerPlatform.Persistence.Migrations
 {
     [DbContext(typeof(TaskManagerPlatformDbContext))]
-    [Migration("20210615191425_initial")]
+    [Migration("20210616091710_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,29 +45,29 @@ namespace TaskManagerPlatform.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("63e78133-b0e2-4ea0-ab46-55f77e2ff74f"),
-                            CreatedDate = new DateTime(2021, 6, 15, 23, 14, 24, 699, DateTimeKind.Local).AddTicks(7933),
+                            Id = new Guid("29bedb33-cfd4-4938-8b54-2c877abbe0a7"),
+                            CreatedDate = new DateTime(2021, 6, 16, 13, 17, 10, 384, DateTimeKind.Local).AddTicks(7454),
                             LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "sign up"
                         },
                         new
                         {
-                            Id = new Guid("5b011b03-d4b1-4867-a125-3a9b6dca426f"),
-                            CreatedDate = new DateTime(2021, 6, 15, 23, 14, 24, 700, DateTimeKind.Local).AddTicks(6079),
+                            Id = new Guid("a82320af-2178-4efd-8a38-5ce5ab99a2b6"),
+                            CreatedDate = new DateTime(2021, 6, 16, 13, 17, 10, 385, DateTimeKind.Local).AddTicks(5850),
                             LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "sign in"
                         },
                         new
                         {
-                            Id = new Guid("dba63703-cd68-4d18-ba7c-0f0b93518fbb"),
-                            CreatedDate = new DateTime(2021, 6, 15, 23, 14, 24, 700, DateTimeKind.Local).AddTicks(6092),
+                            Id = new Guid("91c8d823-5b49-4f33-8039-707d61027a7f"),
+                            CreatedDate = new DateTime(2021, 6, 16, 13, 17, 10, 385, DateTimeKind.Local).AddTicks(5866),
                             LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "manage users"
                         },
                         new
                         {
-                            Id = new Guid("622a1d57-ed3d-456f-9be4-02e5a8879e60"),
-                            CreatedDate = new DateTime(2021, 6, 15, 23, 14, 24, 700, DateTimeKind.Local).AddTicks(6095),
+                            Id = new Guid("698fff34-6219-45a5-9bb3-98d7ae3fa2c7"),
+                            CreatedDate = new DateTime(2021, 6, 16, 13, 17, 10, 385, DateTimeKind.Local).AddTicks(5869),
                             LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "manage tasks"
                         });
@@ -101,16 +101,16 @@ namespace TaskManagerPlatform.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7a0a1d8a-028a-4514-b63b-266b491f8cfe"),
-                            CreatedDate = new DateTime(2021, 6, 15, 23, 14, 24, 701, DateTimeKind.Local).AddTicks(5896),
+                            Id = new Guid("f114dd09-9bdb-4dd6-a191-3890fff210c6"),
+                            CreatedDate = new DateTime(2021, 6, 16, 13, 17, 10, 386, DateTimeKind.Local).AddTicks(6621),
                             Description = "administrator",
                             LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "admin"
                         },
                         new
                         {
-                            Id = new Guid("a7077177-af67-451e-ab34-d9f89d253650"),
-                            CreatedDate = new DateTime(2021, 6, 15, 23, 14, 24, 701, DateTimeKind.Local).AddTicks(6501),
+                            Id = new Guid("92ef06d6-4878-42ba-9d59-ce9c0667c228"),
+                            CreatedDate = new DateTime(2021, 6, 16, 13, 17, 10, 386, DateTimeKind.Local).AddTicks(7224),
                             Description = "user who is registered by admin",
                             LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "user"
@@ -146,43 +146,43 @@ namespace TaskManagerPlatform.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3234a323-dddd-4e23-b98b-d1f6c93cc699"),
-                            CreatedDate = new DateTime(2021, 6, 15, 23, 14, 24, 701, DateTimeKind.Local).AddTicks(6938),
+                            Id = new Guid("a4e72ddf-1e4c-49d7-8ad0-a7782e2381da"),
+                            CreatedDate = new DateTime(2021, 6, 16, 13, 17, 10, 386, DateTimeKind.Local).AddTicks(7737),
                             LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PermissionId = new Guid("63e78133-b0e2-4ea0-ab46-55f77e2ff74f"),
-                            RoleId = new Guid("7a0a1d8a-028a-4514-b63b-266b491f8cfe")
+                            PermissionId = new Guid("29bedb33-cfd4-4938-8b54-2c877abbe0a7"),
+                            RoleId = new Guid("f114dd09-9bdb-4dd6-a191-3890fff210c6")
                         },
                         new
                         {
-                            Id = new Guid("6007b291-7964-454f-9f4a-f20e68c4fe11"),
-                            CreatedDate = new DateTime(2021, 6, 15, 23, 14, 24, 701, DateTimeKind.Local).AddTicks(7922),
+                            Id = new Guid("6dffbe7f-bbb2-42cf-891e-91240dfd3a02"),
+                            CreatedDate = new DateTime(2021, 6, 16, 13, 17, 10, 386, DateTimeKind.Local).AddTicks(8653),
                             LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PermissionId = new Guid("5b011b03-d4b1-4867-a125-3a9b6dca426f"),
-                            RoleId = new Guid("7a0a1d8a-028a-4514-b63b-266b491f8cfe")
+                            PermissionId = new Guid("a82320af-2178-4efd-8a38-5ce5ab99a2b6"),
+                            RoleId = new Guid("f114dd09-9bdb-4dd6-a191-3890fff210c6")
                         },
                         new
                         {
-                            Id = new Guid("c349b699-a03c-499c-9af1-973aa102faac"),
-                            CreatedDate = new DateTime(2021, 6, 15, 23, 14, 24, 701, DateTimeKind.Local).AddTicks(7934),
+                            Id = new Guid("aef921fa-0ce5-44a1-bb86-cb88d2c7aad3"),
+                            CreatedDate = new DateTime(2021, 6, 16, 13, 17, 10, 386, DateTimeKind.Local).AddTicks(8672),
                             LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PermissionId = new Guid("dba63703-cd68-4d18-ba7c-0f0b93518fbb"),
-                            RoleId = new Guid("7a0a1d8a-028a-4514-b63b-266b491f8cfe")
+                            PermissionId = new Guid("91c8d823-5b49-4f33-8039-707d61027a7f"),
+                            RoleId = new Guid("f114dd09-9bdb-4dd6-a191-3890fff210c6")
                         },
                         new
                         {
-                            Id = new Guid("01b9c90c-ee29-4945-84b6-347d7f3069f8"),
-                            CreatedDate = new DateTime(2021, 6, 15, 23, 14, 24, 701, DateTimeKind.Local).AddTicks(7936),
+                            Id = new Guid("88ab4ee7-6f2a-4ffd-8515-137580f71ef0"),
+                            CreatedDate = new DateTime(2021, 6, 16, 13, 17, 10, 386, DateTimeKind.Local).AddTicks(8674),
                             LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PermissionId = new Guid("5b011b03-d4b1-4867-a125-3a9b6dca426f"),
-                            RoleId = new Guid("a7077177-af67-451e-ab34-d9f89d253650")
+                            PermissionId = new Guid("a82320af-2178-4efd-8a38-5ce5ab99a2b6"),
+                            RoleId = new Guid("92ef06d6-4878-42ba-9d59-ce9c0667c228")
                         },
                         new
                         {
-                            Id = new Guid("60b5a387-b28b-4e5a-b01f-bce5407a6bfa"),
-                            CreatedDate = new DateTime(2021, 6, 15, 23, 14, 24, 701, DateTimeKind.Local).AddTicks(7939),
+                            Id = new Guid("66f6f435-06a1-42a1-a1cb-7fe1ec7503d6"),
+                            CreatedDate = new DateTime(2021, 6, 16, 13, 17, 10, 386, DateTimeKind.Local).AddTicks(8676),
                             LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PermissionId = new Guid("622a1d57-ed3d-456f-9be4-02e5a8879e60"),
-                            RoleId = new Guid("a7077177-af67-451e-ab34-d9f89d253650")
+                            PermissionId = new Guid("698fff34-6219-45a5-9bb3-98d7ae3fa2c7"),
+                            RoleId = new Guid("92ef06d6-4878-42ba-9d59-ce9c0667c228")
                         });
                 });
 
@@ -208,29 +208,29 @@ namespace TaskManagerPlatform.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e376b31f-7f33-4437-86ce-e2d35e67af07"),
-                            CreatedDate = new DateTime(2021, 6, 15, 23, 14, 24, 701, DateTimeKind.Local).AddTicks(8341),
+                            Id = new Guid("f0adb644-cf0b-45b1-8952-b19179076493"),
+                            CreatedDate = new DateTime(2021, 6, 16, 13, 17, 10, 386, DateTimeKind.Local).AddTicks(9104),
                             LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "to do"
                         },
                         new
                         {
-                            Id = new Guid("f34d3064-463c-4112-97f6-3d2390e380d2"),
-                            CreatedDate = new DateTime(2021, 6, 15, 23, 14, 24, 701, DateTimeKind.Local).AddTicks(8595),
+                            Id = new Guid("587c7233-7edf-4535-baf8-c50e64321d74"),
+                            CreatedDate = new DateTime(2021, 6, 16, 13, 17, 10, 386, DateTimeKind.Local).AddTicks(9366),
                             LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "doing"
                         },
                         new
                         {
-                            Id = new Guid("f4bc786d-776b-4735-88cb-7658c1dd73ce"),
-                            CreatedDate = new DateTime(2021, 6, 15, 23, 14, 24, 701, DateTimeKind.Local).AddTicks(8600),
+                            Id = new Guid("1bfb2782-da59-4d54-b6cb-f967752a6562"),
+                            CreatedDate = new DateTime(2021, 6, 16, 13, 17, 10, 386, DateTimeKind.Local).AddTicks(9370),
                             LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "test"
                         },
                         new
                         {
-                            Id = new Guid("0b1883f8-54c5-4c61-9d21-3ff37c827d9f"),
-                            CreatedDate = new DateTime(2021, 6, 15, 23, 14, 24, 701, DateTimeKind.Local).AddTicks(8602),
+                            Id = new Guid("066ac025-36d4-42b4-bb62-ea674b736203"),
+                            CreatedDate = new DateTime(2021, 6, 16, 13, 17, 10, 386, DateTimeKind.Local).AddTicks(9372),
                             LastModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "done"
                         });
@@ -255,7 +255,7 @@ namespace TaskManagerPlatform.Persistence.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("StatusId")
+                    b.Property<Guid?>("StatusId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
@@ -296,7 +296,7 @@ namespace TaskManagerPlatform.Persistence.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<Guid>("OrganizationId")
+                    b.Property<Guid?>("OrganizationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PasswordHash")
@@ -407,7 +407,7 @@ namespace TaskManagerPlatform.Persistence.Migrations
                     b.HasOne("TaskManagerPlatform.Domain.Entities.Status", "Status")
                         .WithMany("Tasks")
                         .HasForeignKey("StatusId")
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Status");
                 });
@@ -417,7 +417,7 @@ namespace TaskManagerPlatform.Persistence.Migrations
                     b.HasOne("TaskManagerPlatform.Domain.Entities.User", "Organization")
                         .WithMany("Employees")
                         .HasForeignKey("OrganizationId")
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Organization");
                 });

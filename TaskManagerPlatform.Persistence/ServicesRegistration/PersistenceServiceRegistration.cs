@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TaskManagerPlatform.Application.Contracts.Persistence;
@@ -12,7 +13,8 @@ namespace TaskManagerPlatform.Persistence.ServicesRegistration
         public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<TaskManagerPlatformDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("TaskManagerPlatformDbContextConnectionString")));
+                options.UseLazyLoadingProxies().ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.DetachedLazyLoadingWarning))
+                .UseSqlServer(configuration.GetConnectionString("TaskManagerPlatformDbContextConnectionString")));
             services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IUserRepository, UserRepository>();

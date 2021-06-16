@@ -29,10 +29,11 @@ namespace TaskManagerPlatform.Persistence.Configurations
                    .HasForeignKey(utt => utt.UserId)
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(u => u.Employees)
-                   .WithOne(e => e.Organization)
+            builder.HasOne(e => e.Organization)
+                   .WithMany(o => o.Employees)
                    .HasForeignKey(e => e.OrganizationId)
-                   .OnDelete(DeleteBehavior.ClientSetNull);
+                   .IsRequired(false)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
-using SendGrid;
-using SendGrid.Helpers.Mail;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using TaskManagerPlatform.Application.Contracts.Infrastructure;
 using TaskManagerPlatform.Application.Models.Mail;
@@ -18,26 +18,16 @@ namespace TaskManagerPlatform.Infrastructure.Mail.Services
 
         public async Task<bool> SendEmail(Email email)
         {
-            //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
-            var client = new SendGridClient(_emailSettings.ApiKey);
-
-            var subject = email.Subject;
-            var to = new EmailAddress(email.To);
-            var emailBody = email.Body;
-
-            var from = new EmailAddress
-            {
-                Email = _emailSettings.FromAddress,
-                Name = _emailSettings.FromName
-            };
-
-            var sendGridMessage = MailHelper.CreateSingleEmail(from, to, subject, emailBody, emailBody);
-            var response = await client.SendEmailAsync(sendGridMessage);
-
-            if (response.StatusCode == System.Net.HttpStatusCode.Accepted || response.StatusCode == System.Net.HttpStatusCode.OK)
-                return true;
-
-            return false;
+            SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+            client.UseDefaultCredentials = false;
+            client.EnableSsl = true;
+            client.Credentials = new NetworkCredential(_emailSettings.FromAddress, _emailSettings.Password);
+            MailMessage message = new MailMessage(_emailSettings.FromAddress, email.To);
+            message.IsBodyHtml = true;
+            message.Subject = email.Subject;
+            message.Body = email.Body;
+            await client.SendMailAsync(message);
+            return true;
         }
     }
 }
