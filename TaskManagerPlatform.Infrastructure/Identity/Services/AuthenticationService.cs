@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -8,90 +10,167 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using TaskManagerPlatform.Application.Contracts.Identity;
+using TaskManagerPlatform.Application.Contracts.Persistence;
 using TaskManagerPlatform.Application.Models.Authentication;
+using TaskManagerPlatform.Domain.Entities;
 
 namespace TaskManagerPlatform.Identity.Services
 {
-    public class AuthenticationService: IAuthenticationService
+    public class AuthenticationService: TaskManagerPlatform.Application.Contracts.Identity.IAuthenticationService
     {
+        private readonly IAsyncRepository<UserToRole> _userToRoleRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
+        private readonly IHttpContextAccessor _accessor;
         private readonly JwtSettings _jwtSettings;
 
-        public AuthenticationService(IOptions<JwtSettings> jwtSettings)
+        public AuthenticationService(IAsyncRepository<UserToRole> userToRoleRepository, IUserRepository userRepository, IRoleRepository roleRepository,
+            IHttpContextAccessor accessor, IOptions<JwtSettings> jwtSettings)
         {
+            _userToRoleRepository = userToRoleRepository;
+            _userRepository = userRepository;
+            _roleRepository = roleRepository;
+            _accessor = accessor;
             _jwtSettings = jwtSettings.Value;
         }
 
         public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
         {
-            ////var user = await _userManager.FindByEmailAsync(request.Email);
+            User user = null;
 
-            //if (user == null)
-            //{
-            //    throw new Exception($"User with {request.Email} not found.");
-            //}
+            if(!string.IsNullOrWhiteSpace(request.Email))
+            {
+                user = await _userRepository.GetUserByEmailAsync(request.Email);
+            }
 
-            ////var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
+            if (!string.IsNullOrWhiteSpace(request.Username))
+            {
+                user = await _userRepository.GetUserByUsernameAsync(request.Username);
+            }
 
-            //if (!result.Succeeded)
-            //{
-            //    throw new Exception($"Credentials for '{request.Email} aren't valid'.");
-            //}
+            if (user == null)
+            {
+                throw new Exception($"User with {request.Email} or {request.Username} not found.");
+            }
 
-            //JwtSecurityToken jwtSecurityToken = await GenerateToken(user);
+            string passwordHash = "";
+            bool authenticateResult = false;
 
-            //AuthenticationResponse response = new AuthenticationResponse
-            //{
-            //    Id = user.Id,
-            //    Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-            //    Email = user.Email,
-            //    UserName = user.UserName
-            //};
+            if (!string.IsNullOrWhiteSpace(request.Password))
+            {
+                passwordHash = CreatePasswordHash(request.Password, user.Salt);
+                authenticateResult = VerifyPasswordHash(request.Password, user.Salt, passwordHash);
+            }
 
-            //return response;
+            if (!authenticateResult)
+            {
+                throw new Exception($"Credentials for '{request.Email} or {request.Username} aren't valid'.");
+            }
 
-            throw new NotImplementedException();
+            List<Role> rolesOfUser = await _roleRepository.GetRolesOfUserAsync(user.Id);
+            await SignInAsync(user, rolesOfUser);
+
+            JwtSecurityToken jwtSecurityToken = GenerateToken(user);
+
+            AuthenticationResponse response = new AuthenticationResponse
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Username = user.Username,
+                Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+            };
+
+            return response;
         }
 
-        public async Task<RegistrationResponse> RegisterAsync(RegistrationRequest request)
+        public async Task<SignUpResponse> SignUpAsync(SignUpRequest request)
         {
-            //var existingUser = await _userManager.FindByNameAsync(request.UserName);
+            User user = null;
 
-            //if (existingUser != null)
-            //{
-            //    throw new Exception($"Username '{request.UserName}' already exists.");
-            //}
+            if (!string.IsNullOrWhiteSpace(request.Email))
+            {
+                user = await _userRepository.GetUserByEmailAsync(request.Email);
+            }
 
-            //var user = new ApplicationUser
-            //{
-            //    Email = request.Email,
-            //    FirstName = request.FirstName,
-            //    LastName = request.LastName,
-            //    UserName = request.UserName,
-            //    EmailConfirmed = true
-            //};
+            if (!string.IsNullOrWhiteSpace(request.Username))
+            {
+                user = await _userRepository.GetUserByUsernameAsync(request.Username);
+            }
 
-            //var existingEmail = await _userManager.FindByEmailAsync(request.Email);
+            if (user != null)
+            {
+                throw new Exception($"User with {request.Email} or {request.Username} already exists.");
+            }
 
-            //if (existingEmail == null)
-            //{
-            //    var result = await _userManager.CreateAsync(user, request.Password);
+            User organization = new User
+            {
+                Name = request.Name,
+                PhoneNumber = request.PhoneNumber,
+                Address = request.Address,
+                Email = request.Email,
+                Username = request.Username,
+                Salt = Guid.NewGuid().ToString().Replace("-", "") + DateTime.Now.ToString().Replace("-", "").Replace(" ", "").Replace(":", "")
+            };
 
-            //    if (result.Succeeded)
-            //    {
-            //        return new RegistrationResponse() { UserId = user.Id };
-            //    }
-            //    else
-            //    {
-            //        throw new Exception($"{result.Errors}");
-            //    }
-            //}
-            //else
-            //{
-            //    throw new Exception($"Email {request.Email } already exists.");
-            //}
+            organization.PasswordHash = CreatePasswordHash(request.Password, organization.Salt);
+            await _userRepository.AddAsync(organization);
 
-            throw new NotImplementedException();
+            Role adminRole = await _roleRepository.GetRoleByNameAsync("admin");
+
+            UserToRole newUserToRole = new UserToRole
+            {
+                UserId = organization.Id,
+                RoleId = adminRole.Id
+            };
+
+            await _userToRoleRepository.AddAsync(newUserToRole);
+
+            return new SignUpResponse() { UserId = organization.Id };
+        }
+
+        public async Task<CreateUserResponse> CreateUserAsync(User organizationUser, CreateUserRequest request)
+        {
+            User user = null;
+
+            if (!string.IsNullOrWhiteSpace(request.Email))
+            {
+                user = await _userRepository.GetUserByEmailAsync(request.Email);
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.Username))
+            {
+                user = await _userRepository.GetUserByUsernameAsync(request.Username);
+            }
+
+            if (user != null)
+            {
+                throw new Exception($"User with {request.Email} or {request.Username} already exists.");
+            }
+
+            User newUser = new User
+            {
+                Name = request.Name,
+                Surname = request.Surname,
+                Email = request.Email,
+                Username = request.Username,
+                Salt = Guid.NewGuid().ToString().Replace("-", "") + DateTime.Now.ToString().Replace("-", "").Replace(" ", "").Replace(":", "")
+            };
+
+            newUser.PasswordHash = CreatePasswordHash(request.Password, newUser.Salt);
+            newUser.OrganizationId = organizationUser.Id;
+            await _userRepository.AddAsync(newUser);
+
+            Role userRole = await _roleRepository.GetRoleByNameAsync("user");
+
+            UserToRole newUserToRole = new UserToRole
+            {
+                UserId = newUser.Id,
+                RoleId = userRole.Id
+            };
+
+            await _userToRoleRepository.AddAsync(newUserToRole);
+
+            return new CreateUserResponse() { UserId = newUser.Id };
         }
 
         private string CreatePasswordHash(string password, string secretKey)
@@ -134,38 +213,66 @@ namespace TaskManagerPlatform.Identity.Services
             return true;
         }
 
-        //private async Task<JwtSecurityToken> GenerateToken(User user)
-        //{
-        //    //var userClaims = await _userManager.GetClaimsAsync(user);
-        //    //var roles = await _userManager.GetRolesAsync(user);
+        private async System.Threading.Tasks.Task SignInAsync(User user, List<Role> roles)
+        {
+            await _accessor.HttpContext.SignInAsync("TaskManagerPlatform",
+                GetClaimsPrincipal(user, roles),
+                new AuthenticationProperties
+                {
+                    ExpiresUtc = DateTime.UtcNow.AddHours(24),
+                    IsPersistent = true,
+                    AllowRefresh = false
+                });
+        }
 
-        //    //var roleClaims = new List<Claim>();
+        private ClaimsPrincipal GetClaimsPrincipal(User user, List<Role> roles)
+        {
+            List<Claim> roleClaims = new List<Claim>();
 
-        //    //for (int i = 0; i < roles.Count; i++)
-        //    //{
-        //    //    roleClaims.Add(new Claim("roles", roles[i]));
-        //    //}
+            foreach (var role in roles)
+            {
+                roleClaims.Add(new Claim(ClaimTypes.Role, role.Name));
+            }
 
-        //    var claims = new[]
-        //    {
-        //        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-        //        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        //        new Claim(JwtRegisteredClaimNames.Email, user.Email),
-        //        new Claim("uid", user.Id)
-        //    }
-        //    .Union(userClaims)
-        //    .Union(roleClaims);
+            IEnumerable<Claim> claims = new List<Claim>
+            {
+                new Claim("Name", user.Name),
+                new Claim("Email", user.Email),
+                new Claim("Username", user.Username)
+            }
+            .Union(roleClaims);
 
-        //    var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
-        //    var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+            ClaimsIdentity identity = new ClaimsIdentity(claims, "TaskManagerPlatform");
+            ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+            return principal;
+        }
 
-        //    var jwtSecurityToken = new JwtSecurityToken(
-        //        issuer: _jwtSettings.Issuer,
-        //        audience: _jwtSettings.Audience,
-        //        claims: claims,
-        //        expires: DateTime.UtcNow.AddHours(24),
-        //        signingCredentials: signingCredentials);
-        //    return jwtSecurityToken;
-        //}
+        private JwtSecurityToken GenerateToken(User user)
+        {
+            IEnumerable<Claim> userClaims = _accessor?.HttpContext?.User.Claims;
+            IEnumerable<Claim> roleClaims = userClaims.Where(uc => uc.Type == "Role");
+
+            IEnumerable<Claim> claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim("UserId", user.Id.ToString())
+            }
+            .Union(userClaims)
+            .Union(roleClaims);
+
+            SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
+            SigningCredentials signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+
+            JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(24),
+                signingCredentials: signingCredentials);
+
+            return jwtSecurityToken;
+        }
     }
 }

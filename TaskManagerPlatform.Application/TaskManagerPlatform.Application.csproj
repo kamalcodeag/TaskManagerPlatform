@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Features\" />
-    <Folder Include="ServicesRegistration\" />
     <Folder Include="Profiles\" />
   </ItemGroup>
 

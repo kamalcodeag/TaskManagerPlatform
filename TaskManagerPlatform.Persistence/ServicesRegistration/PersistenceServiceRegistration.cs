@@ -15,6 +15,7 @@ namespace TaskManagerPlatform.Persistence.ServicesRegistration
                 options.UseSqlServer(configuration.GetConnectionString("TaskManagerPlatformDbContextConnectionString")));
             services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             return services;
         }
     }
